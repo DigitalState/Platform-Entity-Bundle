@@ -1,28 +1,28 @@
 {
-  "name": "DigitalState/Platform-Entity-Bundle",
-  "type": "symfony-bundle",
-  "description": "Digital State Platform Entity Bundle",
-  "homepage": "https://github.com/DigitalState/Platform-Entity-Bundle.git",
-  "keywords": ["Oro", "Communication"],
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Digital State, Inc",
-      "homepage": "http://www.digitalState.ca"
+    "name": "digitalstate/platform-entity-bundle",
+    "type": "symfony-bundle",
+    "description": "DigitalState Platform Entity Bundle",
+    "homepage": "https://github.com/DigitalState/Platform-Entity-Bundle.git",
+    "keywords": ["Oro", "Communication"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "DigitalState, Inc",
+            "homepage": "http://www.digitalstate.ca"
+        }
+    ],
+    "require": {
+        "php": ">=5.6",
+        "digitalstate/platform-data-bundle" : "dev-master"
+    },
+    "autoload": {
+        "psr-0": { "Ds\\Bundle\\EntityBundle": "" }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.x-dev"
+        }
     }
-  ],
-  "require": {
-    "php": ">=5.6",
-    "DigitalState/Platform-Data-Bundle" : "dev-master"
-  },
-  "autoload": {
-    "psr-0": { "Ds\\Bundle\\EntityBundle": "" }
-  },
-  "minimum-stability": "dev",
-  "prefer-stable": true,
-  "extra": {
-    "branch-alias": {
-      "dev-master": "0.x-dev"
-    }
-  }
 }
