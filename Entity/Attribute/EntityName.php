@@ -29,7 +29,7 @@ trait EntityName
      *
      * @return object
      */
-    public function setEntityName(string $entityName)
+    public function setEntityName($entityName)
     {
         $this->entityName = $entityName;
 
