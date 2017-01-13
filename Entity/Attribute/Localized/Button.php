@@ -3,6 +3,8 @@
 namespace Ds\Bundle\EntityBundle\Entity\Attribute\Localized;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Oro\Bundle\LocaleBundle\Entity\FallbackTrait;
+use Oro\Bundle\LocaleBundle\Entity\Localization;
 use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
 use LogicException;
 
@@ -11,6 +13,8 @@ use LogicException;
  */
 trait Button
 {
+    use FallbackTrait;
+
     /**
      * Set buttons
      *
@@ -65,6 +69,38 @@ trait Button
     }
 
     /**
+     * Get button
+     *
+     * @param \Oro\Bundle\LocaleBundle\Entity\Localization $localization
+     * @return \Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue
+     */
+    public function getButton(Localization $localization = null)
+    {
+        return $this->getLocalizedFallbackValue($this->buttons, $localization);
+    }
+
+    /**
+     * Set default button
+     *
+     * @param string $button
+     * @return object
+     */
+    public function setDefaultButton($button)
+    {
+        $defaultButton = $this->getDefaultButton();
+
+        if ($defaultButton) {
+            $this->removeButton($defaultButton);
+        }
+
+        $defaultButton = new LocalizedFallbackValue;
+        $defaultButton->setString($button);
+        $this->addButton($defaultButton);
+
+        return $this;
+    }
+
+    /**
      * Get default button
      *
      * @return \Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue
@@ -72,14 +108,6 @@ trait Button
      */
     public function getDefaultButton()
     {
-        $buttons = $this->buttons->filter(function (LocalizedFallbackValue $button) {
-            return null === $button->getLocalization();
-        });
-
-        if ($buttons->count() > 1) {
-            throw new LogicException('There must be only one default button.');
-        }
-
-        return $buttons->first();
+        return $this->getLocalizedFallbackValue($this->buttons);
     }
 }

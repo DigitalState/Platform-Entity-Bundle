@@ -3,6 +3,8 @@
 namespace Ds\Bundle\EntityBundle\Entity\Attribute\Localized;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Oro\Bundle\LocaleBundle\Entity\FallbackTrait;
+use Oro\Bundle\LocaleBundle\Entity\Localization;
 use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
 use LogicException;
 
@@ -11,6 +13,8 @@ use LogicException;
  */
 trait Description
 {
+    use FallbackTrait;
+
     /**
      * Set descriptions
      *
@@ -65,6 +69,38 @@ trait Description
     }
 
     /**
+     * Get description
+     *
+     * @param \Oro\Bundle\LocaleBundle\Entity\Localization $localization
+     * @return \Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue
+     */
+    public function getDescription(Localization $localization = null)
+    {
+        return $this->getLocalizedFallbackValue($this->descriptions, $localization);
+    }
+
+    /**
+     * Set default description
+     *
+     * @param string $description
+     * @return object
+     */
+    public function setDefaultDescription($description)
+    {
+        $defaultDescription = $this->getDefaultDescription();
+
+        if ($defaultDescription) {
+            $this->removeDescription($defaultDescription);
+        }
+
+        $defaultDescription = new LocalizedFallbackValue;
+        $defaultDescription->setString($description);
+        $this->addDescription($defaultDescription);
+
+        return $this;
+    }
+
+    /**
      * Get default description
      *
      * @return \Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue
@@ -72,14 +108,6 @@ trait Description
      */
     public function getDefaultDescription()
     {
-        $descriptions = $this->descriptions->filter(function (LocalizedFallbackValue $description) {
-            return null === $description->getLocalization();
-        });
-
-        if ($descriptions->count() > 1) {
-            throw new LogicException('There must be only one default description.');
-        }
-
-        return $descriptions->first();
+        return $this->getLocalizedFallbackValue($this->descriptions);
     }
 }

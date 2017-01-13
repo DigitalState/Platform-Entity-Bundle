@@ -3,6 +3,8 @@
 namespace Ds\Bundle\EntityBundle\Entity\Attribute\Localized;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Oro\Bundle\LocaleBundle\Entity\FallbackTrait;
+use Oro\Bundle\LocaleBundle\Entity\Localization;
 use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
 use LogicException;
 
@@ -11,6 +13,8 @@ use LogicException;
  */
 trait Url
 {
+    use FallbackTrait;
+
     /**
      * Set urls
      *
@@ -65,6 +69,38 @@ trait Url
     }
 
     /**
+     * Get url
+     *
+     * @param \Oro\Bundle\LocaleBundle\Entity\Localization $localization
+     * @return \Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue
+     */
+    public function getUrl(Localization $localization = null)
+    {
+        return $this->getLocalizedFallbackValue($this->urls, $localization);
+    }
+
+    /**
+     * Set default url
+     *
+     * @param string $url
+     * @return object
+     */
+    public function setDefaultUrl($url)
+    {
+        $defaultUrl = $this->getDefaultUrl();
+
+        if ($defaultUrl) {
+            $this->removeUrl($defaultUrl);
+        }
+
+        $defaultUrl = new LocalizedFallbackValue;
+        $defaultUrl->setString($url);
+        $this->addUrl($defaultUrl);
+
+        return $this;
+    }
+
+    /**
      * Get default url
      *
      * @return \Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue
@@ -72,14 +108,6 @@ trait Url
      */
     public function getDefaultUrl()
     {
-        $urls = $this->urls->filter(function (LocalizedFallbackValue $url) {
-            return null === $url->getLocalization();
-        });
-
-        if ($urls->count() > 1) {
-            throw new LogicException('There must be only one default url.');
-        }
-
-        return $urls->first();
+        return $this->getLocalizedFallbackValue($this->urls);
     }
 }
