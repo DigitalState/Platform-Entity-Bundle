@@ -3,6 +3,8 @@
 namespace Ds\Bundle\EntityBundle\Entity\Attribute\Localized;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Oro\Bundle\LocaleBundle\Entity\FallbackTrait;
+use Oro\Bundle\LocaleBundle\Entity\Localization;
 use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
 use LogicException;
 
@@ -11,6 +13,8 @@ use LogicException;
  */
 trait Title
 {
+    use FallbackTrait;
+
     /**
      * Set titles
      *
@@ -65,6 +69,38 @@ trait Title
     }
 
     /**
+     * Get title
+     *
+     * @param \Oro\Bundle\LocaleBundle\Entity\Localization $localization
+     * @return \Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue
+     */
+    public function getTitle(Localization $localization = null)
+    {
+        return $this->getLocalizedFallbackValue($this->titles, $localization);
+    }
+
+    /**
+     * Set default title
+     *
+     * @param string $title
+     * @return object
+     */
+    public function setDefaultTitle($title)
+    {
+        $defaultTitle = $this->getDefaultTitle();
+
+        if ($defaultTitle) {
+            $this->removeTitle($defaultTitle);
+        }
+
+        $defaultTitle = new LocalizedFallbackValue;
+        $defaultTitle->setString($title);
+        $this->addTitle($defaultTitle);
+
+        return $this;
+    }
+
+    /**
      * Get default title
      *
      * @return \Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue
@@ -72,14 +108,6 @@ trait Title
      */
     public function getDefaultTitle()
     {
-        $titles = $this->titles->filter(function (LocalizedFallbackValue $title) {
-            return null === $title->getLocalization();
-        });
-
-        if ($titles->count() > 1) {
-            throw new LogicException('There must be only one default title.');
-        }
-
-        return $titles->first();
+        return $this->getLocalizedFallbackValue($this->titles);
     }
 }
