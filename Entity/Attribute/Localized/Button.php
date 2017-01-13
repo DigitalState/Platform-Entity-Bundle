@@ -3,7 +3,6 @@
 namespace Ds\Bundle\EntityBundle\Entity\Attribute\Localized;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Oro\Bundle\LocaleBundle\Entity\FallbackTrait;
 use Oro\Bundle\LocaleBundle\Entity\Localization;
 use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
 use LogicException;
@@ -13,8 +12,6 @@ use LogicException;
  */
 trait Button
 {
-    use FallbackTrait;
-
     /**
      * Set buttons
      *
