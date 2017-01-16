@@ -3,6 +3,7 @@
 namespace Ds\Bundle\EntityBundle\Entity\Attribute\Localized;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Oro\Bundle\LocaleBundle\Entity\Localization;
 use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
 use LogicException;
 
@@ -65,6 +66,38 @@ trait Presentation
     }
 
     /**
+     * Get presentation
+     *
+     * @param \Oro\Bundle\LocaleBundle\Entity\Localization $localization
+     * @return \Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue
+     */
+    public function getPresentation(Localization $localization = null)
+    {
+        return $this->getLocalizedFallbackValue($this->presentations, $localization);
+    }
+
+    /**
+     * Set default presentation
+     *
+     * @param string $presentation
+     * @return object
+     */
+    public function setDefaultPresentation($presentation)
+    {
+        $defaultPresentation = $this->getDefaultPresentation();
+
+        if ($defaultPresentation) {
+            $this->removePresentation($defaultPresentation);
+        }
+
+        $defaultPresentation = new LocalizedFallbackValue;
+        $defaultPresentation->setString($presentation);
+        $this->addPresentation($defaultPresentation);
+
+        return $this;
+    }
+
+    /**
      * Get default presentation
      *
      * @return \Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue
@@ -72,14 +105,6 @@ trait Presentation
      */
     public function getDefaultPresentation()
     {
-        $presentations = $this->presentations->filter(function (LocalizedFallbackValue $presentation) {
-            return null === $presentation->getLocalization();
-        });
-
-        if ($presentations->count() > 1) {
-            throw new LogicException('There must be only one default presentation.');
-        }
-
-        return $presentations->first();
+        return $this->getLocalizedFallbackValue($this->presentations);
     }
 }
