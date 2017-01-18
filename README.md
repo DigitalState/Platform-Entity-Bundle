@@ -2,6 +2,9 @@
 
 The Entity bundle extends the OroEntityBundle and provides the developers additional core entity functionality. 
 
+[![Code Climate](https://codeclimate.com/github/DigitalState/Platform-Entity-Bundle/badges/gpa.svg)](https://codeclimate.com/github/DigitalState/Platform-Entity-Bundle)
+[![Test Coverage](https://codeclimate.com/github/DigitalState/Platform-Entity-Bundle/badges/coverage.svg)](https://codeclimate.com/github/DigitalState/Platform-Entity-Bundle/coverage)
+
 ## Table of Contents
 
 - [Controllers](#controllers)
