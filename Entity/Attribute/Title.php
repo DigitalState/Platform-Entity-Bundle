@@ -12,7 +12,7 @@ trait Title
 {
     /**
      * @var string
-     * @ORM\Column(name="title", type="string", length=255)
+     * @ORM\Column(name="title", type="string", length=255, nullable=true)
      * @Assert\NotBlank(message="ds.entity.title.not_blank")
      * @Assert\Length(min=1, max=255, minMessage="ds.entity.title.length.min", maxMessage="ds.entity.title.length.max")
      */
